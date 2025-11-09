@@ -10,9 +10,11 @@ const __dirname = path.dirname(__filename);
 const app = express();
 app.use(express.static(path.join(__dirname, "public")));
 
+// Use the Render provided port
 const PORT = process.env.PORT || 3000;
 const server = createServer(app);
 
+// Create WebSocket server on the same HTTP server
 const wss = new WebSocketServer({ server });
 
 wss.on("connection", (ws) => {
@@ -22,10 +24,8 @@ wss.on("connection", (ws) => {
     console.log("Received:", message);
 
     // Broadcast to all clients
-    wss.clients.forEach((client) => {
-      if (client.readyState === WebSocket.OPEN) {
-        client.send(message.toString());
-      }
+    wss.clients.forEach(client => {
+      if (client.readyState === ws.OPEN) client.send(message.toString());
     });
   });
 
