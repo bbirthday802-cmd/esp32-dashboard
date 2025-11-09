@@ -1,37 +1,33 @@
+import WebSocket, { WebSocketServer } from "ws";
 import express from "express";
-import { WebSocketServer } from "ws";
-import path from "path";
-import { fileURLToPath } from "url";
-import { createServer } from "http";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const app = express();
-app.use(express.static(path.join(__dirname, "public")));
+const PORT = process.env.PORT || 10000;
 
-// Use the Render provided port
-const PORT = process.env.PORT || 3000;
-const server = createServer(app);
+// Serve dashboard files
+app.use(express.static("public"));
 
-// Create WebSocket server on the same HTTP server
+// Start HTTP server
+const server = app.listen(PORT, () => {
+  console.log(`🌍 Express server running on port ${PORT}`);
+});
+
+// Start WebSocket server
 const wss = new WebSocketServer({ server });
 
 wss.on("connection", (ws) => {
   console.log("Client connected");
 
   ws.on("message", (message) => {
-    console.log("Received:", message);
+    console.log("Received from client:", message.toString());
 
-    // Broadcast to all clients
-    wss.clients.forEach(client => {
-      if (client.readyState === ws.OPEN) client.send(message.toString());
+    // Broadcast to all connected clients
+    wss.clients.forEach((client) => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(message.toString());
+      }
     });
   });
 
   ws.on("close", () => console.log("Client disconnected"));
-});
-
-server.listen(PORT, () => {
-  console.log(`🌍 HTTP & WebSocket running on port ${PORT}`);
 });
