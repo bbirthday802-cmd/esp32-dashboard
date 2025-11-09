@@ -1,0 +1,14 @@
+{
+  "name": "esp32-dashboard",
+  "version": "1.0.0",
+  "description": "ESP32 Health Dashboard with WebSocket",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "ws": "^8.13.0"
+  }
+}
