@@ -30,30 +30,47 @@ window.showPanel = function(panelId) {
 };
 
 // ---------------------------
-// Connect to your Render WebSocket server
+// Replace with your Render WebSocket URL
 const socket = new WebSocket("wss://esp32-dashboard-4690.onrender.com");
 
-// When connected
+// Called when WebSocket connection is established
 socket.onopen = () => {
-  console.log("✅ Connected to WebSocket server!");
+    console.log("✅ Connected to WebSocket server");
 };
 
-// When message received
+// Called when WebSocket receives a message
 socket.onmessage = (event) => {
-  const data = JSON.parse(event.data);
-  console.log("Data received:", data);
+    console.log("Data received:", event.data);
 
-  document.getElementById('heartRate').innerText = data.heartRate ? `${data.heartRate} bpm` : 'N/A';
-  document.getElementById('spo2').innerText = data.spo2 ? `${data.spo2}%` : 'N/A';
-  document.getElementById('temp').innerText = data.temperature ? `${data.temperature}°C` : 'N/A';
+    try {
+        // Parse JSON data from ESP32
+        const data = JSON.parse(event.data);
 
-  // Emergency alert if SpO2 < 90
-  const alertPanel = document.getElementById('alertPanel');
-  if (data.spo2 && Number(data.spo2) < 90) {
-    alertPanel.style.display = 'block';
-  } else {
-    alertPanel.style.display = 'none';
-  }
+        // Update dashboard values
+        document.getElementById('heartRate').innerText = data.heartRate ? `${data.heartRate} bpm` : 'N/A';
+        document.getElementById('spo2').innerText = data.spo2 ? `${data.spo2}%` : 'N/A';
+        document.getElementById('temp').innerText = data.temperature ? `${data.temperature}°C` : 'N/A';
+
+        // Show alert if SpO2 is low
+        if (data.spo2 && data.spo2 < 90) {
+            document.getElementById('alertPanel').style.display = 'block';
+        } else {
+            document.getElementById('alertPanel').style.display = 'none';
+        }
+
+    } catch (err) {
+        console.error("JSON parse error:", err);
+    }
+};
+
+// Called if WebSocket connection closes
+socket.onclose = () => {
+    console.log("❌ WebSocket connection closed");
+};
+
+// Called if there’s a WebSocket error
+socket.onerror = (error) => {
+    console.error("WebSocket error:", error);
 };
 
 // Example hospitals
@@ -78,3 +95,4 @@ window.searchHospitals = function() {
 window.onload = () => {
   showPanel('health');
 };
+
