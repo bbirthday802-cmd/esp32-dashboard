@@ -1,5 +1,5 @@
 // Show selected panel
-window.showPanel = function (panelId) {
+window.showPanel = function(panelId) {
   const panels = document.querySelectorAll('.panel');
   const buttons = document.querySelectorAll('.tab-btn');
 
@@ -29,13 +29,16 @@ window.showPanel = function (panelId) {
   }
 };
 
-// Connect to Render WebSocket Server
+// ---------------------------
+// Connect to your Render WebSocket server
 const socket = new WebSocket("wss://esp32-dashboard-4690.onrender.com");
 
+// When connected
 socket.onopen = () => {
-  console.log("✅ Connected to WebSocket server");
+  console.log("✅ Connected to WebSocket server!");
 };
 
+// When message received
 socket.onmessage = (event) => {
   const data = JSON.parse(event.data);
   console.log("Data received:", data);
@@ -53,24 +56,21 @@ socket.onmessage = (event) => {
   }
 };
 
-// Example hospital list
+// Example hospitals
 const hospitals = [
   { name: "CityCare Hospital", distance: "1.2 km" },
   { name: "Metro Heart Institute", distance: "2.3 km" },
   { name: "GreenLife Medical Center", distance: "3.1 km" }
 ];
 
-window.searchHospitals = function () {
+window.searchHospitals = function() {
   const hospitalList = document.getElementById('hospitalList');
   hospitalList.innerHTML = '';
-
   hospitals.forEach(hospital => {
     const button = document.createElement('button');
     button.className = 'hospital-btn';
     button.textContent = `🏥 ${hospital.name} (${hospital.distance})`;
-    button.onclick = () => {
-      alert(`Hospital '${hospital.name}' selected.`);
-    };
+    button.onclick = () => alert(`Hospital '${hospital.name}' selected.`);
     hospitalList.appendChild(button);
   });
 };
