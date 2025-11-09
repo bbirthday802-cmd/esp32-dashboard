@@ -7,7 +7,7 @@ wss.on("connection", (ws) => {
 
   ws.on("message", (message) => {
     console.log("📩 Received:", message);
-
+ 
     // Broadcast data to all connected clients (ESP32 + dashboards)
     wss.clients.forEach((client) => {
       if (client.readyState === WebSocket.OPEN) {
