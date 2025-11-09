@@ -1,49 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Smart Ambulance Dashboard</title>
-<link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Ambulance Dashboard</title>
+  <style>
+    body { font-family: Arial; text-align: center; background: #f8f9fa; margin: 0; padding: 20px; }
+    h1 { color: #007bff; }
+    .data-box {
+      display: inline-block;
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      margin: 10px;
+      width: 200px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    #alertPanel {
+      display: none;
+      background-color: #ff4d4d;
+      color: white;
+      padding: 10px;
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
 
-<nav>
-  <div class="logo">Smart Ambulance</div>
-  <div class="nav-buttons">
-    <button class="tab-btn active" onclick="showPanel('health')">Health</button>
-    <button class="tab-btn" onclick="showPanel('location')">Location</button>
-    <button class="tab-btn" onclick="showPanel('hospitals')">Hospitals</button>
-    <button class="tab-btn" onclick="showPanel('all')">All</button>
-  </div>
-</nav>
+  <h1>🚑 Smart Ambulance Dashboard</h1>
 
-<div class="alert-panel" id="alertPanel" style="display: none;">
-  🚨 Emergency: Patient Oxygen Low!
-</div>
-
-<div class="dashboard-grid">
-  <div id="health" class="panel active">
-    <h2>Patient Health Data</h2>
-    ❤ Heart Rate: <span id="heartRate">N/A</span><br />
-    🩸 SpO₂: <span id="spo2">N/A</span><br />
-    🌡 Temperature: <span id="temp">N/A</span>
+  <div class="data-box">
+    <h3>Heart Rate</h3>
+    <p id="heartRate">--</p>
   </div>
 
-  <div id="location" class="panel">
-    <h2>Ambulance Location</h2>
-    <iframe
-      src="https://www.google.com/maps/embed/v1/place?q=kalaaburagi&key=YOUR_GOOGLE_MAPS_API_KEY"
-    ></iframe>
+  <div class="data-box">
+    <h3>SpO₂</h3>
+    <p id="spo2">--</p>
   </div>
 
-  <div id="hospitals" class="panel">
-    <h2>Nearby Hospital Suggestions</h2>
-    <button class="search-btn" onclick="searchHospitals()">🔍 Search Nearest Hospitals</button>
-    <div id="hospitalList"></div>
+  <div class="data-box">
+    <h3>Temperature</h3>
+    <p id="temp">--</p>
   </div>
-</div>
 
-<script src="script.js" type="module"></script>
+  <div id="alertPanel">⚠️ Low SpO₂ Alert!</div>
+
+  <script src="script.js"></script>
 </body>
 </html>
